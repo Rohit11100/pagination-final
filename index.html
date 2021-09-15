@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="myjs.js"></script>
+    <!-- <link rel="stylesheet" href="mycss.css"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Document</title>
+    <style>
+        .bak {
+            background-color: red;
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-outline">
+                    <input type="text" class="form_search" id="myInput" onkeyup="myFunction()"
+                        placeholder="Search for names.." title="Type in a name">
+                </div>
+
+
+            </div>
+            pagenumber <input type="number" id="numbetData" value="1" />
+
+            <table class="table  sortable" id="myTable">
+                <thead>
+                    <tr>
+
+                        <th>Name</th>
+                        <th >Id</th>
+                        <th>Country</th>
+                        <th >No.</th>
+
+                    </tr>
+                </thead>
+                <tbody id="result">
+
+
+
+
+
+
+                </tbody>
+                <h1 style="display: none;" id="norecord">No record found</h1>
+
+
+            </table>
+            <!-- <input id="prebtn" type='button' value="Pre" onClick='onclickfunction1()' />
+    <input id="btnfirst" type='button' value="1" onclick="getData(document.getElementById('btnfirst1'))" class="inpbtn"></input>
+    <input id="btnfirst1" class="inpbtn" type='button' onclick="getData(document.getElementById('btnfirst2'))" value="2"></input>
+    <input id="btnfirst2" class="inpbtn" type='button' onclick="getData(document.getElementById('btnfirst3'))" value="3"></input>
+    <input id="btnfirst3" class="}inpbtn" type='button' onclick="getData(document.getElementById('btnfirst4'))" value="4"></input>
+    <input id="btnfirst4" class="inpbtn" type='button' onclick="getData(document.getElementById('btnfirst5'))" value="5"></input>
+    <input id="next" type='button' value="Next" onClick='onclickfunction() ' /> -->
+
+
+            <div id="input_groupone">
+
+                <input id="prebtn" type='button' value="Pre"
+                    onClick='onclickfunction1() ; getData(document.getElementById("btnfirst1").value) ; preww() ; actpre() '
+                    class="btn btn-warning " />
+
+
+                <input id="btnfirst1" type='button' value="1"
+                    onclick="getData(document.getElementById('btnfirst1').value) ; disa() ; forprew()  "
+                    class="btn btn-primary child btnfir" />
+                <input id="btnfirst2" class="btn btn-primary child"
+                    onclick="getData(document.getElementById('btnfirst2').value) ; disa() " type='button' value="2" />
+                <input id="btnfirst3" class="btn btn-primary child" type='button'
+                    onclick="getData(document.getElementById('btnfirst3').value) ; disa()  ; actthree() " value="3" />
+                <input id="btnfirst4" value="4" onclick="getData(document.getElementById('btnfirst4').value) ; disa()  "
+                    class="btn btn-primary child" type='button' />
+                <input id="btnfirst5" class="btn btn-primary child" type='button'
+                    onclick="getData(document.getElementById('btnfirst5').value) ; disa() " value="5" />
+
+
+
+                <input id="next" type='button' value="Next" class="btn btn-warning "
+                    onClick='onclickfunction() ; getData(document.getElementById("btnfirst5").value)  ; disa() ; actnext() ' />
+
+                <input id="last" type='button' value="Last" onClick='getlast() ; getlData() ; actlast()  '
+                    class="btn btn-warning" />
+
+
+            </div>
+
+
+
+
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+</body>
+
+
+<script>
+    let page = 1
+    let last;
+    const getlast = () => {
+        getData(last)
+
+    }
+
+
+
+
+
+    let prew = document.getElementById('prebtn');
+    let next = document.getElementById('next');
+    let lastpage = document.getElementById('last')
+
+
+
+    function disa() {
+        next.disabled = false
+        lastpage.disabled = false
+        prew.disabled = false
+
+        document.getElementById('norecord').style.display = 'none';
+        document.getElementById('last').classList.remove('bak');
+
+
+
+    }
+    function preww() {
+        next.disabled = false
+        lastpage.disabled = false
+        if (document.getElementById('numbetData').value == 1) {
+        prew.disabled = true;
+    }
+
+    }
+
+    function forprew() {
+        if (document.getElementById('numbetData').value == 1) {
+            prew.disabled = true;
+        }
+    }
+
+
+    if (document.getElementById('numbetData').value == 1) {
+        prew.disabled = true;
+    }
+
+    let inner = document.getElementById('numbetData').innerText;
+    console.log(inner);
+
+
+
+    function getlData() {
+
+
+        let lastr = document.getElementById('norecord').style.display = 'inline';
+        next.disabled = true;
+        lastpage.disabled = true
+        prew.disabled = false
+
+        document.getElementById("btnfirst1").value = 622
+        document.getElementById("btnfirst2").value = 623
+        document.getElementById("btnfirst3").value = 624
+        document.getElementById("btnfirst4").value = 625
+        document.getElementById("btnfirst5").value = 626
+
+
+
+
+
+    }
+    const getData = (i) => {
+        document.getElementById("numbetData").value = i
+        let result = document.getElementById("result");
+        let row = ""
+        let data = ""
+        fetch(`https://api.instantwebtools.net/v1/passenger?page=${i}&size=20`)
+            .then(res => res.json())
+            .then(res => {
+                last = res.totalPages
+                data = res.data;
+                console.log("data ", last)
+                console.log(res);
+                // let x = page * 20 - 20;
+                data.forEach((res, i) => {
+                    x = i + 1;
+                    row += `<tr id="table_row">
+                        <td id='name_search'>${res.name}</td>
+                        <td>${res._id}</td>
+                        <td>${res.airline[0].country}</td>
+                        <td id='noid'>${x}</td>
+                        </tr>`
+                    page++
+
+                    // console.log(x);
+                    // if(document.getElementById('btnfirst1').clicked == true)
+                    // {
+                    //     console.log(x )
+                    // }
+
+                });
+                result.innerHTML = row
+            })
+
+
+    }
+
+    getData(1)
+    const onclickfunction = () => {
+        let btnvalue = document.getElementById("btnfirst1").value;
+
+        document.getElementById("btnfirst1").value = parseInt(document.getElementById("btnfirst1").value) + 1
+        document.getElementById("btnfirst2").value = parseInt(document.getElementById("btnfirst2").value) + 1
+        document.getElementById("btnfirst3").value = parseInt(document.getElementById("btnfirst3").value) + 1
+        document.getElementById("btnfirst4").value = parseInt(document.getElementById("btnfirst4").value) + 1
+        document.getElementById("btnfirst5").value = parseInt(document.getElementById("btnfirst5").value) + 1
+
+        // alert(btnvalue)
+        if (document.getElementById("btnfirst5").value == last) {
+            let btn = document.getElementById("next");
+            // btn.style
+            btn.disabled = true
+        }
+        if (document.getElementById("btnfirst1").value != 1) {
+            let btn = document.getElementById("prebtn");
+            // btn.style
+            btn.disabled = false
+
+        }
+
+    }
+    const onclickfunction1 = () => {
+        let pre = 1;
+        let last = 627;
+        let btnvalue = document.getElementById("btnfirst1").value;
+        document.getElementById("btnfirst1").value = parseInt(document.getElementById("btnfirst1").value) - 1
+        document.getElementById("btnfirst2").value = parseInt(document.getElementById("btnfirst2").value) - 1
+        document.getElementById("btnfirst3").value = parseInt(document.getElementById("btnfirst3").value) - 1
+        document.getElementById("btnfirst4").value = parseInt(document.getElementById("btnfirst4").value) - 1
+        document.getElementById("btnfirst5").value = parseInt(document.getElementById("btnfirst5").value) - 1
+
+
+
+    }
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName('tr');
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+
+                }
+            }
+        }
+    }
+
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable");
+        switching = true;
+
+        dir = "asc";
+
+        while (switching) {
+
+            switching = false;
+            rows = table.rows;
+
+            for (i = 1; i < (rows.length - 1); i++) {
+
+                shouldSwitch = false;
+
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+
+
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+
+
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+
+                switchcount++;
+            } else {
+
+
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+    var elements = document.getElementsByClassName("child");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].onclick = function () {
+
+            // remove class from sibling
+
+            var el = elements[0];
+            while (el) {
+                if (el.tagName === "INPUT") {
+                    //remove class
+                    el.classList.remove("bak");
+
+                }
+                // pass to the new sibling
+                el = el.nextSibling;
+            }
+
+
+            this.classList.add("bak");
+        };
+    }
+
+
+
+
+
+    function actpre() {
+        document.getElementById('btnfirst1').classList.add('bak');
+        document.getElementById('btnfirst2').classList.remove('bak');
+        document.getElementById('btnfirst3').classList.remove('bak');
+        document.getElementById('btnfirst4').classList.remove('bak');
+        document.getElementById('btnfirst5').classList.remove('bak');
+        document.getElementById('last').classList.remove('bak');
+
+
+    }
+
+
+    function actnext(){
+        document.getElementById('last').classList.remove('bak');
+        document.getElementById('btnfirst1').classList.remove('bak');
+        document.getElementById('btnfirst2').classList.remove('bak');
+        document.getElementById('btnfirst3').classList.remove('bak');
+        document.getElementById('btnfirst4').classList.remove('bak');
+        document.getElementById('btnfirst5').classList.add('bak');
+    }
+    function actlast(){
+        document.getElementById('btnfirst1').classList.remove('bak');
+        document.getElementById('btnfirst2').classList.remove('bak');
+        document.getElementById('btnfirst3').classList.remove('bak');
+        document.getElementById('btnfirst4').classList.remove('bak');
+        document.getElementById('btnfirst5').classList.remove('bak');
+        document.getElementById('last').classList.add('bak');
+
+    }
+
+
+    // }
+    // function actnext() {
+
+    //     document.getElementById('btnfirst5').style.backgroundColor = 'red';
+    //     document.getElementsById('btnfirst1').style.backgroundColor = 'none';
+    //     document.getElementById('last').style.backgroundColor = 'none';
+
+
+    // }
+    // function actlast() {
+    //     document.getElementById('last').style.backgroundColor = 'red';
+    //     document.getElementsById('btnfirst1').style.backgroundColor = 'none';
+    //     document.getElementById('btnfirst5').style.backgroundColor = 'none';
+
+    // }
+
+
+
+
+</script>
+
+</html>
